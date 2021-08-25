@@ -1,0 +1,69 @@
+openapi: 3.0.0
+info:
+  title: APIs Open Data do Open Insurance Brasil
+  description: API de informações de Seguro Residencial. Os são recursos que podem ser consumidos pelos participantes conforme a regra 3.2.2 do manual de escopo de dados.
+  version: 1.0.0
+  contact:
+    url: 'https://http://novosite.susep.gov.br'
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+externalDocs:
+  description: Find out more about Reflectoring
+  url: https://reflectoring.io/about/
+servers:
+  - url: https://reflectoring.swagger.io/open-insurance/products-services/v1
+tags:
+  - name: home-insurance-product
+    description: Operations about products
+    externalDocs:
+      description: Find out more about our store
+      url: http://swagger.io
+paths:
+  /product/{productname}:
+    get:
+      tags:
+        - home-insurance-product
+      summary: Get home-insurance-product by home-insurance-product name
+      operationId: getProductByName
+      parameters:
+        - name: productname
+          in: path
+          description: 'The name that needs to be fetched. Use product1 for testing. '
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HomeInsuranceProduct'
+        404:
+          description: Product not found
+          content: {}
+
+components:
+  schemas:
+    HomeInsuranceProduct:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        productname:
+          type: string
+  securitySchemes:
+    reflectoring_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: http://reflectoring.swagger.io/oauth/dialog
+          scopes:
+            write:users: modify users
+            read:users: read users
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
